@@ -4,7 +4,7 @@ let ws;
 let userId = null;
 
 function connect() {
-    ws = new WebSocket("ws://localhost:3000");
+    ws = new WebSocket("ws://testch.onrender.com");
 
     ws.onopen = () => {
         console.log("✅ connected");
