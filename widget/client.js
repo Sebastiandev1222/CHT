@@ -1,4 +1,4 @@
-const socket = new WebSocket("ws://testch.onrender.com");
+const socket = new WebSocket("ws://cht-l5qf.onrender.com");
 
 const clientId = Date.now().toString();
 
