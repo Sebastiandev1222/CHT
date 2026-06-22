@@ -7,8 +7,13 @@ const db = require("./db");
 const app = express();
 const server = http.createServer(app);
 const wss = new WebSocketServer({ server });
+const path = require("path");
 
-app.use(express.static("public"));
+
+
+app.use(express.static(path.join(__dirname, "../public")));
+app.use("/admin", express.static(path.join(__dirname, "../admin")));
+app.use("/widget", express.static(path.join(__dirname, "../widget")));
 
 app.get("/", (req, res) => {
     res.json({
