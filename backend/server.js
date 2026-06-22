@@ -10,6 +10,19 @@ const wss = new WebSocketServer({ server });
 
 app.use(express.static("public"));
 
+app.get("/", (req, res) => {
+    res.json({
+        status: "online",
+        message: "Chat server is running"
+    });
+});
+
+app.get("/health", (req, res) => {
+    res.json({
+        status: "ok"
+    });
+});
+
 const users = new Map();
 const admins = new Set();
 
