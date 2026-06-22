@@ -26,9 +26,7 @@ const admins = new Set();
 wss.on("connection", (ws, req) => {
     const url = new URL(req.url, `http://${req.headers.host}`);
     const role = url.searchParams.get("role");
-
-    const paramUserId = url.searchParams.get("userId");
-    const userId = paramUserId || uuidv4();
+    const userId = uuidv4();
     ws.id = userId;
     ws.role = role || "user";
     console.log("Connected:", role, userId);
@@ -51,6 +49,7 @@ wss.on("connection", (ws, req) => {
                         message: data.message
                     }));
                 }
+                // ✅ CHANGED: ? → $1, $2, $3
                 db.query(
                     "INSERT INTO messages (roomId, sender, message) VALUES ($1, $2, $3)",
                     [data.roomId, "admin", data.message]
@@ -72,20 +71,6 @@ wss.on("connection", (ws, req) => {
     broadcastUsers();
     ws.on("message", (raw) => {
         const data = JSON.parse(raw);
-
-        if (data.type === "load_history") {
-            db.query(
-                "SELECT sender, message FROM messages WHERE roomId = $1 ORDER BY id ASC",
-                [userId]
-            ).then(result => {
-                ws.send(JSON.stringify({
-                    type: "history",
-                    messages: result.rows
-                }));
-            });
-            return;
-        }
-
         if (data.type === "user_message") {
             console.log("USER → ADMIN:", userId, data.message);
             admins.forEach(a => {
@@ -97,6 +82,7 @@ wss.on("connection", (ws, req) => {
                     }));
                 }
             });
+            // ✅ CHANGED: ? → $1, $2, $3
             db.query(
                 "INSERT INTO messages (roomId, sender, message) VALUES ($1, $2, $3)",
                 [userId, "user", data.message]
