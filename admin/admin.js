@@ -1,7 +1,7 @@
 let ws;
 
 function connect() {
-    ws = new WebSocket("ws://localhost:3000?role=admin");
+    ws = new WebSocket("wss://testch.onrender.com?role=admin&password=Chatchat123");
 
     ws.onopen = () => {
         document.getElementById("status").innerText = "✅ Admin Connected";
